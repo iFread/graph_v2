@@ -12,8 +12,7 @@ namespace Graph {
  представляет область (прямоугольник) в который помещается шкала с делениями, и маркировкой
 длина будет устанавливаться в зависимости от размера виджета.
 */
-#define  default_width 20
-#define  default_hight 20 // второй размер виджета
+
 
 enum Axis_pos{none,horisontal,vertical};
 class dynamic_axis:public Fl_Widget
@@ -42,7 +41,8 @@ private:
  Text lab{{0,0},""}; // отображение текста
  Lines ls{Lines::SeparatesLines};   // отображение линии
 // double scale(){return diviration[index];}
-
+ int default_width {20};
+ int default_hight{20};
 
 };
 

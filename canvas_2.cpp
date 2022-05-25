@@ -2,13 +2,15 @@
 namespace Graph {
 
 
-canvas_2::canvas_2(int xx,int yy,int ww,int hh,const std::string &s):Fl_Widget(xx,yy,ww,hh,s.c_str())
+canvas_2::canvas_2(int xx,int yy,int ww,int hh,const std::string &s): Fl_Scroll(xx,yy,ww,hh)//Fl_Widget(xx,yy,ww,hh,s.c_str())
 {
    _tool=nullptr;
+Fl_Widget::type(Fl_Scroll::BOTH);
 }
 
 void canvas_2::draw()
 {
+    Fl_Scroll::draw();
 // color(Fl_Color(FL_WHITE));
  fl_rectf(this->x(),y(),w(),h(),FL_WHITE);
 
@@ -77,28 +79,34 @@ Shape_t* canvas_2::move_to_shape()
 // Canvas создавать здесь !!!
 //  и все объекты связанные с ним должны быть определены сдесь
 
-Canvas::Canvas(Point xy,int ww,int hh): Fl_Scroll(xy.x(),xy.y(),ww,hh)
+Canvas::Canvas(Point xy,int ww,int hh): Fl_Group(xy.x(),xy.y(),ww,hh)//Fl_Scroll(xy.x(),xy.y(),ww,hh)
 {    //
    // canvas_2 *
     //scroll =new Fl_Scroll(xy.x(),xy.y(),ww,hh ,"");
 
-            cnv_ptr=new canvas_2(xy.x()+20,xy.y(),ww-20,hh-40,"");
+            cnv_ptr=new canvas_2(xy.x()+width_axis ,xy.y()+hight_axis,ww-2*width_axis,hh-4*hight_axis,"");
     // scroll->
              add(cnv_ptr);
    // dynamic_axis*
-            dyn_x=new dynamic_axis(Axis_pos::horisontal,{xy.x()+20,xy.y()+(hh-40)},ww-20,10,"axis_x");
+            dyn_x=new dynamic_axis(Axis_pos::horisontal,{xy.x()+width_axis, xy.y() },ww-2*width_axis,10,"axis_x");
    // scroll->
             add(dyn_x);
    // dynamic_axis*
-            dyn_y=new dynamic_axis(Axis_pos::vertical,{xy.x()+20,xy.y()+(hh-40) },hh-40,10,"axis_y");
+            dyn_y=new dynamic_axis(Axis_pos::vertical,{xy.x(),xy.y()+hight_axis},hh-4*hight_axis,10,"axis_y");
    //scroll->
            add(dyn_y);
 
   // add(scroll);
 }
 void Canvas::resize(int x, int y, int w, int h)
-{
-Fl_Group::resize(x,y,w,h);
+{ //iwtolerance=w/40;
+    Fl_Widget::resize(x,y,w,h);
+    // ihtolerance=h/30;
+//Fl_Group::resize(x,y,w,h);
+    cnv_ptr->resize(this->x()+width_axis,this->y()+hight_axis,this->w()-2*width_axis,this->h()-4*hight_axis);
+    dyn_x->resize(this->x()+width_axis,this->y(),this->w()-2*width_axis,hight_axis);
+    dyn_y->resize(this->x(),this->y()+hight_axis,width_axis,this->h()-4*hight_axis );
+
 }
 void Canvas::draw()
 {

@@ -14,7 +14,10 @@
 
   namespace Graph{
 
-class canvas_2:public Fl_Widget
+#define  width_axis 20
+#define hight_axis 20
+
+class canvas_2:public  Fl_Scroll
 {
     Tool* _tool {nullptr} ;
  //   Shape *cur_sh{nullptr};
@@ -24,7 +27,7 @@ class canvas_2:public Fl_Widget
 
 public:     // создаем новый виджет в позиции x,y
     canvas_2(int x_pos, int y_pos, int ww,int hh,const std::string &s);
-
+    void resize(int x,int y,int w,int h){Fl_Widget::resize(x,y,w,h);}
     Point get_mouse(){return cur_mouse_point;}
     void set_tool(Tool* tl) ;      // if(_tool) {delete _tool; _tool=tl;} else _tool=tl;
     Tool * tool() const {return  _tool;}
@@ -51,7 +54,7 @@ public:     // создаем новый виджет в позиции x,y
 
 // группа виджетов, включает canvas(холст) и шкалы размеров , отвечает за их взаимодействие
 
-class Canvas:public    Fl_Scroll// Fl_Group
+class Canvas:public    Fl_Group
 {public:
     Canvas(Point xy,int ww,int hh);//:Fl_Group(xy.x(),xy.y(),ww,hh){}
 
@@ -70,6 +73,10 @@ private:
  dynamic_axis *dyn_x{nullptr};
  dynamic_axis* dyn_y{nullptr};
 // Fl_Scroll *scroll{nullptr};
+// т.к. canvas отвечает за отоброжение классов,
+ //ему нужно отслеживать их размер
+// int iwtolerance{40};
+// int ihtolerance{30};
 
 };
 

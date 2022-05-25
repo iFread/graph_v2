@@ -9,46 +9,53 @@ namespace Graph {
 
 void dynamic_axis::init(Point xy,int len,int st)
 {
+  // переданная точка левая верхняя точка
     length=len;
     step=st;
     lab.set_point(xy);
  ls.clear(); // очистить прежниие вершины
  // следует предусмотреть возможность откладывать начало как с низу поля, так и сверху
-     ls.add({xy.x(),xy.y()+length}); // первая точка, начальная
+     //ls.add({xy.x(),xy.y()+length}); // первая точка, начальная
      switch (placement)
      {
        case none:
          return;
        case horisontal:
-           Fl_Widget::resize(xy.x(),xy.y(),length,default_hight); // высота виджета по умолчанию
-          lab.move(length-50,default_hight+5); //
-         ls.add({xy.x()+length,xy.y()});
+
+         Fl_Widget::resize(xy.x(),xy.y(),length,default_hight); // высота виджета по умолчанию
+          lab.move(length-50,default_hight-20); //
+
+          ls.add({xy.x(),xy.y()+default_hight},{xy.x()+length,xy.y()+default_hight});
          // рисуем линии с шагом step;
+        {
+          Point beg=ls.point(0);
          for(int i=1;i<length/step;++i)
          { if(i%10)
-                 ls.add({xy.x()+i*step,xy.y()+5},{xy.x()+i*step,xy.y()});
+                 ls.add({beg.x()+i*step,beg.y()},{beg.x()+i*step,beg.y()-5});
+                  // ls.add({xy.x()+i*step,xy.y()+default_hight},{xy.x()+i*step,xy.y()+default_hight-5});
              else
-                  ls.add({xy.x()+i*step,xy.y()+10},{xy.x()+i*step,xy.y()});
+                 ls.add({beg.x()+i*step,beg.y()},{beg.x()+i*step,beg.y()-10});
+                 // ls.add({xy.x()+i*step,xy.y()+default_hight},{xy.x()+i*step,xy.y()+default_hight-10});
          }
-
+        }
          break;
      case vertical:
      { // верхняя левая точка должна быть правой нижней (в дальнейшем возможно правой верхней)
          // видимо здесь наоборот передается правая нижняя точка
-       xy.x(xy.x()-default_width);
-       xy.y(xy.y()-length); // получили левую верхнюю точку
-       Point beg={xy.x() ,xy.y()+length}; //для отсчета с низу
+      // xy.x(xy.x()-default_width);
+      // xy.y(xy.y()-length); // получили левую верхнюю точку
+       Point beg={xy.x()+default_width ,xy.y()}; //для отсчета с низу
         Fl_Widget::resize(xy.x(),xy.y(),default_width,length);
         // переместить подпись, т.к lab установлена относительно начала отсчета
-        lab.move(-default_width,-(length+10));
+        lab.move(-default_width,-10);
         // т.к. первая точка была внизу участка, вторая вверху
-        ls.add({xy.x(),xy.y()});
+        ls.add({xy.x()+default_width,xy.y()});
         for( unsigned i=1;i<length/step;++i)
         {
             if(i%10)
-                ls.add({beg.x()+15,beg.y()-i*step},{beg.x()+20,beg.y()-i*step});
+                ls.add({beg.x(),beg.y()+i*step},{beg.x()-5,beg.y()+i*step});
            else
-                ls.add({beg.x()+10,beg.y()-i*step},{beg.x()+20,beg.y()-i*step});
+                ls.add({beg.x(),beg.y()+i*step},{beg.x()-10,beg.y()+i*step});
         }
            break;
 
@@ -138,9 +145,9 @@ if((i/2)%10==0){
     value=(index<2)?1.0/diviration[index]:1.0*diviration[index];
  ss<<(i/2)*value;              //2-1,4 -2, 6 -3 ,8 -4
     if(placement==horisontal)
-    fl_draw(ss.str().c_str(),ls.point(i-2).x(),ls.point(i-2).y()+15);
+    fl_draw(ss.str().c_str(),ls.point(i-2).x(),ls.point(i-2).y()-20);
   if(placement==vertical)
-      fl_draw(ss.str().c_str(),ls.point(i-2).x()-15,ls.point(i-2).y());
+      fl_draw(ss.str().c_str(),ls.point(i-2).x()-25,ls.point(i-2).y());
 }
 }
 fl_color(old);
@@ -149,7 +156,7 @@ fl_color(old);
 void dynamic_axis::update(Point xy, int len)
 {
   length=len;
-  ls.clear();
+ // ls.clear();
   // if(placement==vertical) xy.x(xy.x()-20);
 // init(placement,xy,len,step,lab.label());
  //Fl_Widget::redraw();
@@ -159,14 +166,17 @@ init(xy,len,step);
 void dynamic_axis::resize(int xx, int yy, int ww, int hh)  // x, y - верхняя левая точка
 {
 
- std::cout<<"X ="<<xx<<" Y= "<<yy<<" W = "<<ww<<" H = "<<hh<<"\n";
+
+ std::cout<<" W = "<<ww<<" H = "<<hh<<"\n";
    if(placement==vertical){
-   update({xx+ww,yy+hh },hh);
-std::cout<<"vertical\n";
+   default_width=ww;
+   update({xx ,yy},hh);
+
     }
  if(placement==horisontal)
-     update({xx,yy},ww);
-  //Fl_Widget::resize(xx,yy,ww,hh);
+     update({xx,yy},ww );
+default_hight=hh;
+ //Fl_Widget::resize(xx,yy,ww,hh);
 }
 
 

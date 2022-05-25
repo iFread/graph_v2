@@ -137,6 +137,8 @@ void axis::set_scale(int sc)
 da.change_scale(sc);
 }
 
+//************************************************************************
+
 Cnvs_grp::Cnvs_grp(Point xy,int ww,int hh,const string& s):Widget(xy,ww,hh,s,0)
 {
    }

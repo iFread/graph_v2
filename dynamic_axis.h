@@ -12,6 +12,9 @@ namespace Graph {
  представляет область (прямоугольник) в который помещается шкала с делениями, и маркировкой
 длина будет устанавливаться в зависимости от размера виджета.
 */
+#define  default_width 20
+#define  default_hight 20 // второй размер виджета
+
 enum Axis_pos{none,horisontal,vertical};
 class dynamic_axis:public Fl_Widget
 {
@@ -19,12 +22,13 @@ class dynamic_axis:public Fl_Widget
 public:
 
  //dynamic_axis():Fl_Widget(0,0,0,0,""){}     // создает пустой виджет Fl_Widget(0,0,0,0,"");
- dynamic_axis(Axis_pos pos,Point xy,int len,int st, std::string s):Fl_Widget(xy.x(),xy.y(),len,20,""),placement{pos},step{st},length{len}
+    dynamic_axis(Axis_pos pos,Point xy,int len,int st, std::string s):Fl_Widget(xy.x(),xy.y(),len,20,""),placement{pos},step{st},length{len},lab{xy,s}
  {
-    init(placement,xy,length,step,s);
+    init(xy,length,step);
  }
- void init(Axis_pos pos,Point xy,int len,int st,  std::string s); // инициализация происходит от типа- горизонтально или вертикально
- void change_scale(int i){index=i; }
+ //void init(Axis_pos pos,Point xy,int len,int st,  std::string s); // инициализация происходит от типа- горизонтально или вертикально
+ void init(Point xy,int len,int st);
+    void change_scale(int i){index=i; }
   void update(Point xy,int len); // установить новые размеры
   void resize(int xx,int yy,int ww,int hh);
  void draw() ; // отрисовка линий

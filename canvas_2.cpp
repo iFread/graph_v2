@@ -98,28 +98,25 @@ Canvas::Canvas(Point xy,int ww,int hh): Fl_Scroll(xy.x(),xy.y(),ww,hh)
 }
 void Canvas::resize(int x, int y, int w, int h)
 {
-
+Fl_Group::resize(x,y,w,h);
 }
-
 void Canvas::draw()
 {
   Fl_Group::draw_children();
 }
 int Canvas::handle(int ev)
 {
+
 if(ev==FL_MOUSEWHEEL)
 {
-   Fl_Widget*wgt=nullptr;
-   int i=0;
-   while (wgt=child(i))
-   {
-    wgt->handle(ev);
-    ++i;
+    dyn_x->handle(ev);
+    dyn_y->handle(ev);
+
    }
 
-}
+//}
 
-     Fl_Group::handle(ev);
+    Fl_Group::handle(ev);
     return ev;
 }
 

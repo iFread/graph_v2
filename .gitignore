@@ -1,6 +1,5 @@
 #.gitignore
 
-
 build/
 gui_interface.h
 gui_interface.cpp

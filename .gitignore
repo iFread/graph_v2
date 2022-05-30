@@ -4,3 +4,4 @@ build/
 gui_interface.h
 gui_interface.cpp
 main_.cpp
+main

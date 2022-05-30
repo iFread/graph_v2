@@ -80,9 +80,9 @@ int Window::handle(int event)
 
       if(Fl::event_inside(wgt))//wgt->x(),wgt->y(),wgt->w(),wgt->h()))
        wgt->handle(event);//
-redraw();
-   }
 
+   }
+      redraw();
 // if(Fl::event()==FL_SCREEN_CONFIGURATION_CHANGED)
  //
    return event;

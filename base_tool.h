@@ -51,12 +51,13 @@ virtual int handle(int e);  //  в дальнейшем определить с�
 virtual ~Tool(){active_shape.clear();}
 
 protected:
+ tool_type _type; // тип инструмента
   canvas_2 *cnvs;     // указатель на виджет Widget, (унаследовать от Widget)
 
-    Tool(canvas_2* ptr,Tool::tool_type tp):cnvs{ptr},_type{tp}{}
+    Tool(canvas_2* ptr,Tool::tool_type tp):_type{tp},cnvs{ptr}{}
  std::vector<Shape_t*> active_shape; // список активных фигур, с которыми будет работать инструмент
 private:
-    tool_type _type; // тип инструмента
+
 
 };
 

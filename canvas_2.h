@@ -3,6 +3,7 @@
 #include <Fl/Fl_Widget.H>
 #include <Fl/Fl_Group.H>
 #include <Fl/Fl_Scroll.H>
+#include <Fl/Fl_Box.H>
 
 
 
@@ -17,30 +18,47 @@
 #define  width_axis 20
 #define hight_axis 20
 
-class canvas_2:public  Fl_Scroll
+  struct in_box
+  {
+    int x;
+    int y;
+    int w;
+    int h;
+     };
+
+
+class canvas_2:public Fl_Box
 {
     Tool* _tool {nullptr} ;
  //   Shape *cur_sh{nullptr};
     std::vector <Shape_t*> sh_t_vec;
     //Axis ax_y;
     Point cur_mouse_point{};
+    double cur_scale {1.0};
 
 public:     // создаем новый виджет в позиции x,y
     canvas_2(int x_pos, int y_pos, int ww,int hh,const std::string &s);
-    void resize(int x,int y,int w,int h){Fl_Widget::resize(x,y,w,h);}
     Point get_mouse(){return cur_mouse_point;}
     void set_tool(Tool* tl) ;      // if(_tool) {delete _tool; _tool=tl;} else _tool=tl;
     Tool * tool() const {return  _tool;}
-   Shape_t * move_to_shape();    // определяем, что курсор мыши содержится на фигуре из вектора Shape_t
-  int count()const {return sh_t_vec.size();} // размер вектора
+    void set_scale(double );
+    double scale(){return cur_scale;}
+     void draw_cursor(in_box);
+
+    Shape_t * move_to_shape();    // определяем, что курсор мыши содержится на фигуре из вектора Shape_t
+   int count()const {return sh_t_vec.size();} // размер вектора
   // загрузка фигуры в вектор
   void add(Shape_t* st){sh_t_vec.push_back(st);}
   void clear_tool(){if(_tool) {delete _tool; _tool=nullptr;std::cout<<"clear_tool 1 2 3\n";}}
 //  метод отрисовки и метод взаимодействия с пользователем
   void draw();
   int handle(int event);
+  void resize(int x,int y,int w,int h);// {Fl_Widget::resize(x,y,w,h);}
 
+
+  //void resize(int x,int y,int w,int h);
   // удаление фигур из вектора,
+
   ~canvas_2()
  {
       for(unsigned i=sh_t_vec.size();i>0;--i)
@@ -50,6 +68,22 @@ public:     // создаем новый виджет в позиции x,y
       if(_tool)
           delete _tool;
   }
+};
+class Scroll:public Fl_Scroll
+{ public:
+
+    Scroll(Point xy,int ww,int hh) ;//:Fl_Scroll(xy.x(),xy.y(),ww,hh,""){}
+    int handle(int ev);
+    void draw();
+
+    ~Scroll(){}
+  void resize(int x,int y,int w,int h);
+  canvas_2* canvas(){return ptr;}
+ in_box inside_box();
+private:
+  canvas_2*ptr{nullptr};
+ // dynamic_axis* x_axis {nullptr};
+  //dynamic_axis*y_axis{nullptr};
 };
 
 // группа виджетов, включает canvas(холст) и шкалы размеров , отвечает за их взаимодействие
@@ -69,6 +103,7 @@ class Canvas:public    Fl_Group
  void set_tool(Tool* tl){   cnv_ptr->set_tool(tl);}
  canvas_2* get_canvas(){return cnv_ptr;}
 private:
+ Scroll *s_ptr{nullptr};
  canvas_2 *cnv_ptr {nullptr};
  dynamic_axis *dyn_x{nullptr};
  dynamic_axis* dyn_y{nullptr};

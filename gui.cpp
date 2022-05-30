@@ -170,7 +170,7 @@ void Cnvs_grp::attach(Window & w)
 int Cnvs_grp::handle(int e)
 {
  // Canvas &gr=reference_to<Canvas>(pw);
-   Fl_Scroll &sc=reference_to<Fl_Scroll>(pw);
+   Fl_Group &sc=reference_to<Fl_Group>(pw);
     return sc.handle(e);
 }
 Canvas* Cnvs_grp::canvas()

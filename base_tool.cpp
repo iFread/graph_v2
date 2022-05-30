@@ -345,15 +345,15 @@ if(active()) // если активна меняем последнюю точк
      switch (Fl::event_button())
         {
          case FL_LEFT_MOUSE: // отпустив лкм, нужно добавить новую вершину,
-if(active()) // если фигура уже созданна
-     {      active_shape[0]->add_vertex(cnvs->get_mouse());
+           if(active()) // если фигура уже созданна
+             {      active_shape[0]->add_vertex(cnvs->get_mouse());
        //std::cout<<"Left button up\n";
       }
-  else
- {
- add(create(cnvs->get_mouse()));
+        else
+                {
+              add(create(cnvs->get_mouse()));
  //add(pl);
-   }
+                          }
        break;
         case FL_RIGHT_MOUSE:     // перенос из секции Fl_PUSH
             if(active()) // если линия уже создается загрузим ее в вектор, если будет что загружать

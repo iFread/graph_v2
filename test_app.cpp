@@ -3,7 +3,7 @@ using namespace Graph;
 
 test_window::test_window(Point xy,int ww,int hh,const string &s):Graph::Window(xy,ww,hh,s.c_str()),
 
-    grp({100,10},x_max()-120,y_max()-30,"canvas"),
+    grp({100,20},x_max()-120,y_max()-20,"canvas"),
    // scrll({100,10},x_max()-120,y_max()-30),
     //{grp.position().x(),grp.position().y()},grp.width()+20,grp.hight(),"scroll"),
     tool(Point(15,10),70,20,"tool"),

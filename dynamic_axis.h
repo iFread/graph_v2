@@ -28,14 +28,15 @@ public:
  //void init(Axis_pos pos,Point xy,int len,int st,  std::string s); // инициализация происходит от типа- горизонтально или вертикально
  void init(Point xy,int len,int st);
     void change_scale(int i){index=i; }
-  void update(Point xy,int len); // установить новые размеры
+  double scale();
+    void update(Point xy,int len); // установить новые размеры
   void resize(int xx,int yy,int ww,int hh);
  void draw() ; // отрисовка линий
  int handle(int e);
  ~dynamic_axis(){}
 private:
  Axis_pos placement;
- int step{10};
+ int step{40};
  int length{0};
  int index=2;
  Text lab{{0,0},""}; // отображение текста

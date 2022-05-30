@@ -62,7 +62,7 @@ void dynamic_axis::init(Point xy,int len,int st)
 
          }
 }
-redraw();
+//redraw();
 }
 
 //void  dynamic_axis::init(Axis_pos pos,Point xy,int len,int st,  std::string s)
@@ -179,7 +179,7 @@ default_hight=hh;
  //Fl_Widget::resize(xx,yy,ww,hh);
 }
 
-
+double dynamic_axis::scale(){return ((index<2)?1.0/diviration[index]:1.0*diviration[index]); ;}
 int dynamic_axis::handle(int e)
 {
 

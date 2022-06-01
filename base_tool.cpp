@@ -260,8 +260,13 @@ int Pen::handle(int e) // перегружает handle для Pen
     case FL_MOVE:
 
      if(active())
-         modify_base(cnvs->get_mouse());
-        break;
+         // точка в координатах canvas, от 0,0 - это cnv.x(),cnv.y()
+         // добавлять ее нужно на данные координаты canvas_2
+       { // Point cur=cnvs->get_mouse();
+
+         modify_base(cnvs->get_mouse()); ////{cur.x()+cnvs->x(),cur.y()+cnvs->y()});//
+        }
+         break;
     case FL_RELEASE: // по Release производим захват точек.
     //  event_buttons() не может обработать этот случай,
 
@@ -334,8 +339,10 @@ int Poly_line::handle(int e)
         break;
     case FL_MOVE:
 if(active()) // если активна меняем последнюю точку
-   modify_base(cnvs->get_mouse());
-// std::cout<<"Active yes\n";
+ {//Point new_v={cnvs->get_mouse().x()*1/cnvs->scale(),cnvs->get_mouse().y()*1/cnvs->scale()};
+    modify_base(cnvs->get_mouse());
+
+   } // std::cout<<"Active yes\n";
         break;
      case FL_DRAG:
 
@@ -346,12 +353,19 @@ if(active()) // если активна меняем последнюю точк
         {
          case FL_LEFT_MOUSE: // отпустив лкм, нужно добавить новую вершину,
            if(active()) // если фигура уже созданна
-             {      active_shape[0]->add_vertex(cnvs->get_mouse());
-       //std::cout<<"Left button up\n";
-      }
+             {   //Point cur=cnvs->get_mouse();
+
+               //cur.x(cur.x()+cnvs->x());
+               //cur.y(cur.y()+cnvs->y());//cnvs->get_mouse()); //
+              // Point new_v={cnvs->get_mouse().x()*1/cnvs->scale(),cnvs->get_mouse().y()*1/cnvs->scale()};
+               active_shape[0]->add_vertex(cnvs->get_mouse());//-Point{cnvs->x(),cnvs->y()});//new_v);
+      std::cout<<"Add "<<(active_shape[0]->point(active_shape[0]->vertex_count()-1)).x()<<" "<<(active_shape[0]->point(active_shape[0]->vertex_count()-1)).y()<<"\n";
+     // std::cout<<active_shape[0]->vertex_count()<<"\n";
+           }
         else
                 {
-              add(create(cnvs->get_mouse()));
+            //   Point new_v={cnvs->get_mouse().x()*1/cnvs->scale(),cnvs->get_mouse().y()*1/cnvs->scale()};
+              add(create(cnvs->get_mouse()));//new_v));
  //add(pl);
                           }
        break;
@@ -389,19 +403,31 @@ if(active()) // если активна меняем последнюю точк
 }
  // отрисовать жирным выделенную линию, и выделить вершины
 void Poly_line::draw()
-{
+{ Point cnv_beg={cnvs->x(),cnvs->y()};
+   // std::cout<<"canvs coord :"<<cnvs->x()<<" "<<cnvs->y()<<"\n";
     for(unsigned i=0;i<active_shape.size();++i) // для каждой вершины рисуем окружность и линию толшиной больше чем данная
     {
     //    active_shape[i]->set_style(Line_style(Line_style::solid,2));
 
        for(int j=0; j<active_shape[i]->vertex_count()-1;++j)
        {
-          Point p=active_shape[i]->point(j);
+          Point p=active_shape[i]->point(j)/cnvs->scale()+cnv_beg; //+cnv_beg;
+          Point beg=active_shape[i]->point(j)/cnvs->scale()+cnv_beg;
+          Point _end=active_shape[i]->point(j+1)/cnvs->scale()+cnv_beg;
+//         p.x(p.x()/cnvs->scale());p.y(p.y()/cnvs->scale());
+//         beg.x(beg.x()/cnvs->scale());beg.y(beg.y()/cnvs->scale());
+//         _end.x(_end.x()/cnvs->scale());_end.y(_end.y()/cnvs->scale());
+//           beg=beg+cnv_beg;
+//           _end=_end+cnv_beg;
          fl_color(35);
           fl_pie(p.x()-3,p.y()-3,6,6,0,360); // рисуем окружность, для каждой вершины
    // каждая линия рисуется отдельно, нужно определить где указатель мыши
-          fl_line(active_shape[i]->point(j).x(),active_shape[i]->point(j).y(),active_shape[i]->point(j+1).x(),active_shape[i]->point(j+1).y());
-
+          // точки содержат координаты от начала cnvs, что бы изобразить их в реальном положении
+          // нужно прибавить к ним начало canvas
+      //   fl_line(beg.x()/cnvs->scale(),beg.y()/cnvs->scale(),_end.x()/cnvs->scale(),_end.y()/cnvs->scale());
+        //  fl_line(active_shape[i]->point(j).x(),active_shape[i]->point(j).y(),active_shape[i]->point(j+1).x(),active_shape[i]->point(j+1).y());
+         fl_line(beg.x(),beg.y(),_end.x(),_end.y());
+     std::cout<<" line _to {"<<beg.x()<<", "<<beg.y()<<"} to {"<<_end.x()<<", "<<_end.y()<<"\n";
        } // для каждой фигуры рисуем линию
 //active_shape[i]->draw();
 

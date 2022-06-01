@@ -22,7 +22,7 @@ public:
           return true;
       return false;
     }
-    bool isValid()
+    bool isValid() const
     {
       if(_x==_x &&_y==_y)
           return true;
@@ -56,6 +56,11 @@ _y=x;
  {
      return {_x+p._x,_y+p._y};
  }
+
+ Point operator/(const Point&) const ;
+ Point operator*(const Point&) const;
+ Point operator/(float f) const;
+ Point operator*(float f) const;
 };
 
 

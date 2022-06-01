@@ -28,7 +28,7 @@ public:
  //void init(Axis_pos pos,Point xy,int len,int st,  std::string s); // инициализация происходит от типа- горизонтально или вертикально
  void init(Point xy,int len,int st);
     void change_scale(int i){index=i; }
-  double scale();
+ int scale();
     void update(Point xy,int len); // установить новые размеры
   void resize(int xx,int yy,int ww,int hh);
  void draw() ; // отрисовка линий
@@ -39,11 +39,14 @@ private:
  int step{40};
  int length{0};
  int index=2;
+
+ int scale_t{100};  //массштаб от 1 до 100
+
  Text lab{{0,0},""}; // отображение текста
  Lines ls{Lines::SeparatesLines};   // отображение линии
 // double scale(){return diviration[index];}
- int default_width {20};
- int default_hight{20};
+ int default_width {30};
+ int default_hight{30};
 
 };
 

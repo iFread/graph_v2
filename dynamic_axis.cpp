@@ -125,9 +125,9 @@ void dynamic_axis::draw()
 {
   // Рисуем контур
     if(placement==vertical)
-    fl_rectf(x(),y(),20,length,FL_DARK1);
+    fl_rectf(x(),y(),default_width,length,FL_DARK1);
     else
-      fl_rectf(x(),y(),length,20,FL_DARK1);
+      fl_rectf(x(),y(),length,default_hight,FL_DARK1);
 
         ls.draw();
        lab.draw();
@@ -174,12 +174,14 @@ void dynamic_axis::resize(int xx, int yy, int ww, int hh)  // x, y - верхн�
 
     }
  if(placement==horisontal)
+ {default_hight=hh;
      update({xx,yy},ww );
-default_hight=hh;
+
+}
  //Fl_Widget::resize(xx,yy,ww,hh);
 }
 
-double dynamic_axis::scale(){return ((index<2)?1.0/diviration[index]:1.0*diviration[index]); ;}
+int dynamic_axis::scale(){ return scale_t;}            //return ((index<2)?1.0/diviration[index]:1.0*diviration[index]); ;}
 int dynamic_axis::handle(int e)
 {
 
@@ -191,7 +193,14 @@ int dynamic_axis::handle(int e)
      (div>0)?--index:++index;
       index=(index>0)?index:0;
       index=(index<4)?index:4;
-}
+
+    (div>0)?--scale_t:scale_t++;
+        if(scale_t>100)
+             scale_t=100;
+         if(scale_t<1)
+              scale_t=1;
+    }
+
 //    if(index>2)
 //    {
 //         set_scale(diviration[index]);
@@ -209,7 +218,7 @@ int dynamic_axis::handle(int e)
         break;
 
     }
-  redraw();
+//  redraw();
   return 0;
 }
 

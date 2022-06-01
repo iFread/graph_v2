@@ -84,7 +84,7 @@ public:
     void draw ()const;
 
     virtual ~Shape_t();
-
+    virtual void draw_with_coord(Point p);
 
     void set_color(Color col){lcolor=col;}
     void set_style(Line_style st){ls=st;}
@@ -119,7 +119,7 @@ inline void add(Point p)
        else //нужно добавлять в конец, а не во вторую позицию
          v->ccw()->insert(new Vertex(p));
 
-      std::cout<<v->ccw()->x()<<" "<<v->ccw()->y()<<"\n";
+      std::cout<<"Shape_t::add() :"<<v->ccw()->x()<<" "<<v->ccw()->y()<<"\n";
       size++;
 
     }
@@ -222,8 +222,11 @@ public:
 
        if(p2.isValid())
           Shape_t::add(p2);
-        else std::cout<<"not Valid\n"; //
+       // else std::cout<<"not Valid\n"; //
        }
+
+
+
     void remove()
     {
   if(0<vertex_count())

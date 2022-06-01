@@ -25,6 +25,24 @@ Node* Node:: remove() // удаляет текущий узел
 }
 
 //**************************Shape_t
+ //рисует координаты относительно точки p
+void Shape_t::draw_with_coord(Point p)
+{
+    Fl_Color old=fl_color();
+    fl_color(lcolor.as_int());
+    fl_line_style(ls.style(),ls.width());
+  // рисование линии
+    Vertex *w=v;
+    //Point beg=v->point();
+
+    for(;w->cw()!=v;w=w->cw())
+    { Point beg=w->point()+p;
+      Point end=w->cw()->point()+p;
+      fl_line(beg.x(),beg.y(),end.x(),end.y());
+    }
+    fl_color(old);
+    fl_line_style(0);
+}
 
 void Shape_t::draw() const
 {
@@ -73,7 +91,7 @@ void Shape_t::rotate(Point p, double an)
             float x_rot= p.x()+(w->point().x()-p.x())*cos(angle)-(w->point().y()-p.y())*sin(angle);
             float y_rot= p.y()+((w->point().x()-p.x())*sin(angle))+((w->point().y()-p.y())*cos(angle));
             w->change({x_rot,y_rot});
-            std::cout<<w->point().x()<<" "<<w->point().y()<<" \n";
+            std::cout<<"rotate() :"<<w->point().x()<<" "<<w->point().y()<<" \n";
            if(w->cw()==v)
             break;
         }

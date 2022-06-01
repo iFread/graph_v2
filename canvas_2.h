@@ -15,8 +15,11 @@
 
   namespace Graph{
 
-#define  width_axis 20
-#define hight_axis 20
+#define  width_axis 30
+#define hight_axis 30
+const int widht_field =30000; //
+const int hight_field =30000 ;// Ширина и высота рабочего поля в мм
+
 
   struct in_box
   {
@@ -33,18 +36,18 @@ class canvas_2:public Fl_Box
  //   Shape *cur_sh{nullptr};
     std::vector <Shape_t*> sh_t_vec;
     //Axis ax_y;
-    Point cur_mouse_point{};
-    double cur_scale {1.0};
+    Point cur_mouse_point{}; //точка в пределах canvas
+ int cur_scale {100};
 
 public:     // создаем новый виджет в позиции x,y
     canvas_2(int x_pos, int y_pos, int ww,int hh,const std::string &s);
-    Point get_mouse(){return cur_mouse_point;}
+    Point get_mouse(){return cur_mouse_point;}//{cur_mouse_point.x()+x(),cur_mouse_point.y()+y()};}
     void set_tool(Tool* tl) ;      // if(_tool) {delete _tool; _tool=tl;} else _tool=tl;
     Tool * tool() const {return  _tool;}
-    void set_scale(double );
-    double scale(){return cur_scale;}
+    void set_scale(int );
+    float scale(){return cur_scale;}
      void draw_cursor(in_box);
-
+      void set_mouse_position(const Point & );
     Shape_t * move_to_shape();    // определяем, что курсор мыши содержится на фигуре из вектора Shape_t
    int count()const {return sh_t_vec.size();} // размер вектора
   // загрузка фигуры в вектор
@@ -80,10 +83,13 @@ class Scroll:public Fl_Scroll
   void resize(int x,int y,int w,int h);
   canvas_2* canvas(){return ptr;}
  in_box inside_box();
+ void set_scale(int s);
 private:
   canvas_2*ptr{nullptr};
- // dynamic_axis* x_axis {nullptr};
-  //dynamic_axis*y_axis{nullptr};
+  int scale{100};
+
+  //dynamic_axis* x_axis {nullptr};
+  // dynamic_axis*y_axis{nullptr};
 };
 
 // группа виджетов, включает canvas(холст) и шкалы размеров , отвечает за их взаимодействие
